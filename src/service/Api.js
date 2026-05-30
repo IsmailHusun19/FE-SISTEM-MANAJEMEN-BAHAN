@@ -37,7 +37,7 @@ const EditMe = async (data) => {
 
 const GetAllUsers = async () => {
   try {
-    const res = await axios.get("${BASE_URL}/users/all", {
+    const res = await axios.get(`${BASE_URL}/users/all`, {
       withCredentials: true,
     });
     return res.data;
