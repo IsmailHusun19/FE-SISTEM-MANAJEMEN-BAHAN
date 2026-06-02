@@ -46,7 +46,7 @@ const Bahan = () => {
   ) {
     return null;
   }
-  const canManageBahan = ["OWNER", "STAFF_GUDANG"].includes(user?.role);
+  const canManageBahan = ["STAFF_GUDANG"].includes(user?.role);
 
   const handleAdd = () => {
     navigate("/bahan/tambah-bahan");
@@ -235,7 +235,7 @@ const Bahan = () => {
                 </div>
 
                 {/* BUTTON */}
-                {(user?.role === "OWNER" || user?.role === "STAFF_GUDANG") && (
+                {(user?.role === "STAFF_GUDANG") && (
                   <button
                     onClick={handleAdd}
                     className="
@@ -259,6 +259,7 @@ const Bahan = () => {
                 )}
 
                 {(user?.role === "SUPERVISOR_PRODUKSI" ||
+                user?.role === "OWNER" ||
                   user?.role === "LEADER_PRODUKSI") && (
                   <button
                     onClick={() => window.history.back()}

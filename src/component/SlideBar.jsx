@@ -11,6 +11,7 @@ import { BASE_URL } from "../utils/config";
 export default function Sidebar({ children }) {
   const { expanded, setExpanded } = useContext(SidebarContext);
   const { user } = useAuth();
+  const [imageError, setImageError] = useState(false);
 
   return (
     <>
@@ -168,15 +169,16 @@ export default function Sidebar({ children }) {
                   ring-2 ring-white
                 "
               >
-                {user?.avatar ? (
-                  <img
-                    src={`${BASE_URL}/${user.avatar}`}
-                    alt={user?.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  user?.name?.charAt(0)?.toUpperCase()
-                )}
+      {user?.avatar && !imageError ? (
+        <img
+          src={`${BASE_URL}/${user.avatar}`}
+          alt={user?.name}
+          className="w-full h-full object-cover"
+          onError={() => setImageError(true)}
+        />
+      ) : (
+        user?.name?.charAt(0)?.toUpperCase()
+      )}
               </div>
 
                       <span

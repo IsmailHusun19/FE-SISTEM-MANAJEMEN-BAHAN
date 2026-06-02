@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import MenuSlideBar from "../component/MenuSlidebar";
 import { SidebarContext } from "../component/SidebarContextProvider";
 import NavbarV2 from "../component/NavbarV2";
@@ -11,6 +11,7 @@ import { BASE_URL } from "../utils/config";
 const Profile = () => {
   const { expanded } = useContext(SidebarContext);
   const { user } = useAuth();
+  const [imageError, setImageError] = useState(false);
 
   const [form, setForm] = useState({
     name: user?.name || "",
@@ -23,6 +24,9 @@ const Profile = () => {
 
   const [preview, setPreview] = useState(avatarUrl);
   const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    setImageError(false);
+  }, [preview]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -165,17 +169,16 @@ const Profile = () => {
                         shadow-[0_18px_45px_rgba(251,146,60,0.28)]
                       "
                     >
-                      {preview ? (
-                        <img
-                          src={preview}
-                          alt="Avatar"
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        form.name?.charAt(0)?.toUpperCase() || (
-                          <UserRound size={42} />
-                        )
-                      )}
+{preview && !imageError ? (
+  <img
+    src={preview}
+    alt="Avatar"
+    className="w-full h-full object-cover"
+    onError={() => setImageError(true)}
+  />
+) : (
+  form.name?.charAt(0)?.toUpperCase() || <UserRound size={42} />
+)}
 
                       <label
                         className="

@@ -1,11 +1,11 @@
-import React from "react";
 import { PackageSearch, ChevronDown } from "lucide-react";
+import React, {useState} from "react";
 import { useAuth } from "../component/AuthContext";
 import { BASE_URL } from "../utils/config";
 
 const NavbarV2 = () => {
   const { user } = useAuth();
-
+  const [imageError, setImageError] = useState(false);
   return (
     <div
       className="
@@ -97,15 +97,16 @@ const NavbarV2 = () => {
                   ring-2 ring-white
                 "
               >
-                {user?.avatar ? (
-                  <img
-                    src={`${BASE_URL}/${user.avatar}`}
-                    alt={user?.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  user?.name?.charAt(0)?.toUpperCase()
-                )}
+      {user?.avatar && !imageError ? (
+        <img
+          src={`${BASE_URL}/${user.avatar}`}
+          alt={user?.name}
+          className="w-full h-full object-cover"
+          onError={() => setImageError(true)}
+        />
+      ) : (
+        user?.name?.charAt(0)?.toUpperCase()
+      )}
               </div>
 
               <span

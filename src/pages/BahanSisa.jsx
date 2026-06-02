@@ -157,7 +157,7 @@ const BahanSisa = () => {
   const dataCetak =
     filters.startDate && filters.endDate
       ? bahanSisa.filter((item) => {
-          const tanggal = new Date(item.tanggalMasuk);
+          const tanggal = new Date(item.createdAt);
           const start = new Date(filters.startDate);
           const end = new Date(filters.endDate);
   
@@ -166,6 +166,7 @@ const BahanSisa = () => {
           return tanggal >= start && tanggal <= end;
         })
       : bahanSisa;
+      console.log(filters)
   
   const handlePrint = useReactToPrint({
     contentRef: printRef,

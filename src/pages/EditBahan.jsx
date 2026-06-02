@@ -32,14 +32,14 @@ const EditBahan = () => {
   useEffect(() => {
     if (!user) return;
 
-    if (!["STAFF_GUDANG", "OWNER"].includes(user.role)) {
+    if (!["STAFF_GUDANG"].includes(user.role)) {
       navigate("/error");
     }
   }, [user, navigate]);
 
   if (
     !user ||
-    !["STAFF_GUDANG", "OWNER"].includes(user.role)
+    !["STAFF_GUDANG"].includes(user.role)
   ) {
     return null;
   }
