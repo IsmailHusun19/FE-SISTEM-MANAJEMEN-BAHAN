@@ -8,10 +8,8 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   RefreshCw,
-  Download,
   Zap,
   CheckCircle,
-  Filter,
   FileText,
   Calendar,
   TrendingUp,
@@ -22,6 +20,7 @@ import { SidebarContext } from "../component/SidebarContextProvider";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { GetDashboard } from "../service/Api";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const statusStyle = {
   success: "bg-emerald-50 text-emerald-700 border border-emerald-200",
@@ -99,6 +98,7 @@ const StatCard = ({
 );
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const { expanded } = useContext(SidebarContext);
 
   const today = new Date().toISOString().slice(0, 10);
@@ -156,6 +156,7 @@ const Dashboard = () => {
       trend: "Masuk",
       trendUp: true,
       sub: "Akumulasi bahan masuk sesuai periode",
+      path: "/bahan/penerimaan-bahan",
     },
 
     {
@@ -167,6 +168,7 @@ const Dashboard = () => {
       trend: "Pakai",
       trendUp: true,
       sub: "Total pemakaian bahan sesuai periode",
+      path: "/pemakaian-bahan",
     },
 
     {
@@ -178,6 +180,7 @@ const Dashboard = () => {
       trend: "Aktif",
       trendUp: true,
       sub: "Total stok bahan aktif saat ini",
+      path: "/bahan/kelola-bahan",
     },
 
     {
@@ -189,8 +192,10 @@ const Dashboard = () => {
       trend: `${dashboard.summary.stockMenipis}`,
       trendUp: false,
       sub: "Perlu perhatian segera",
+      path: "/bahan/kelola-bahan",
     },
   ];
+
   const chartData = dashboard?.analytics || {};
 
   const activeChart = chartData?.[activeTab] || [];
@@ -384,9 +389,15 @@ const Dashboard = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-            {stats.map((item, index) => (
-              <StatCard key={index} {...item} />
-            ))}
+          {stats.map((item, index) => (
+  <div
+    key={index}
+    onClick={() => navigate(item.path)}
+    className="cursor-pointer hover:shadow-lg transition-all duration-300"
+  >
+         <StatCard key={index} {...item} />
+  </div>
+))}
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">

@@ -170,7 +170,7 @@ const BahanSisa = () => {
   
   const handlePrint = useReactToPrint({
     contentRef: printRef,
-    documentTitle: "Data Penerimaan Bahan",
+    documentTitle: "Data Pemakaian Bahan",
   });
   
   const handleCetak = () => {

@@ -35,14 +35,26 @@ const Bahan = () => {
   useEffect(() => {
     if (!user) return;
 
-    if (!["OWNER", "STAFF_GUDANG", "SUPERVISOR_PRODUKSI", "LEADER_PRODUKSI"].includes(user.role)) {
+    if (
+      ![
+        "OWNER",
+        "STAFF_GUDANG",
+        "SUPERVISOR_PRODUKSI",
+        "LEADER_PRODUKSI",
+      ].includes(user.role)
+    ) {
       navigate("/error");
     }
   }, [user, navigate]);
 
   if (
     !user ||
-    !["OWNER", "STAFF_GUDANG", "SUPERVISOR_PRODUKSI", "LEADER_PRODUKSI"].includes(user.role)
+    ![
+      "OWNER",
+      "STAFF_GUDANG",
+      "SUPERVISOR_PRODUKSI",
+      "LEADER_PRODUKSI",
+    ].includes(user.role)
   ) {
     return null;
   }
@@ -235,7 +247,7 @@ const Bahan = () => {
                 </div>
 
                 {/* BUTTON */}
-                {(user?.role === "STAFF_GUDANG") && (
+                {user?.role === "STAFF_GUDANG" && (
                   <button
                     onClick={handleAdd}
                     className="
@@ -259,7 +271,7 @@ const Bahan = () => {
                 )}
 
                 {(user?.role === "SUPERVISOR_PRODUKSI" ||
-                user?.role === "OWNER" ||
+                  user?.role === "OWNER" ||
                   user?.role === "LEADER_PRODUKSI") && (
                   <button
                     onClick={() => window.history.back()}
@@ -414,10 +426,10 @@ const Bahan = () => {
 
                         {/* ACTION */}
                         {canManageBahan && (
-                        <div className="flex items-center gap-3 mt-5">
-                          <button
-                            onClick={() => handleEdit(item.id)}
-                            className="
+                          <div className="flex items-center gap-3 mt-5">
+                            <button
+                              onClick={() => handleEdit(item.id)}
+                              className="
                               flex-1 h-11
                               rounded-2xl
                               bg-orange-50
@@ -427,14 +439,14 @@ const Bahan = () => {
                               flex items-center justify-center gap-2
                               transition-all
                             "
-                          >
-                            <Pencil size={16} />
-                            Edit
-                          </button>
+                            >
+                              <Pencil size={16} />
+                              Edit
+                            </button>
 
-                          <button
-                            onClick={() => handleDelete(item.id)}
-                            className="
+                            <button
+                              onClick={() => handleDelete(item.id)}
+                              className="
                               flex-1 h-11
                               rounded-2xl
                               bg-red-50
@@ -444,11 +456,11 @@ const Bahan = () => {
                               flex items-center justify-center gap-2
                               transition-all
                             "
-                          >
-                            <Trash2 size={16} />
-                            Hapus
-                          </button>
-                        </div>
+                            >
+                              <Trash2 size={16} />
+                              Hapus
+                            </button>
+                          </div>
                         )}
                       </div>
                     ))}
@@ -526,8 +538,16 @@ const Bahan = () => {
                           </span>
                         </td>
 
-                        <td className="px-6 py-6 text-sm text-slate-500">
-                          {item.stok || "-"}
+                        <td className="px-6 py-6">
+                          <span
+                            className={`px-3 py-1 rounded-xl text-xs font-semibold ${
+                              Number(item.stok) < Number(item.jumlahMinimum)
+                                ? "bg-red-50 text-red-500"
+                                : "bg-green-50 text-green-500"
+                            }`}
+                          >
+                            {item.stok || "-"}
+                          </span>
                         </td>
 
                         <td className="px-6 py-6 text-sm text-slate-500">
