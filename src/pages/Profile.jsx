@@ -3,7 +3,7 @@ import MenuSlideBar from "../component/MenuSlidebar";
 import { SidebarContext } from "../component/SidebarContextProvider";
 import NavbarV2 from "../component/NavbarV2";
 import { useAuth } from "../component/AuthContext";
-import { Camera, Save, UserRound, Mail, Lock } from "lucide-react";
+import { Camera, Save, UserRound, Mail, Lock, IdCard } from "lucide-react";
 import { toast } from "sonner";
 import { EditMe } from "../service/Api";
 import { BASE_URL } from "../utils/config";
@@ -16,6 +16,7 @@ const Profile = () => {
   const [form, setForm] = useState({
     name: user?.name || "",
     email: user?.email || "",
+    nik: user?.nik || "",
     password: "",
     avatar: null,
   });
@@ -30,22 +31,33 @@ const Profile = () => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-
+  
     if (name === "avatar") {
       const file = files[0];
-
+  
       setForm((prev) => ({
         ...prev,
         avatar: file,
       }));
-
+  
       if (file) {
         setPreview(URL.createObjectURL(file));
       }
-
+  
       return;
     }
-
+  
+    if (name === "nik") {
+      const nik = value.replace(/\D/g, "").slice(0, 10);
+  
+      setForm((prev) => ({
+        ...prev,
+        nik,
+      }));
+  
+      return;
+    }
+  
     setForm((prev) => ({
       ...prev,
       [name]: value,
@@ -55,11 +67,25 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!form.nik) {
+      toast.error("NIK wajib diisi");
+      return;
+    }
+    
+    if (form.nik.length < 10) {
+      toast.error("NIK minimal 10 digit");
+      return;
+    }
+    
+    if (form.nik.length > 10) {
+      toast.error("NIK maksimal 10 digit");
+      return;
+    }
     const formData = new FormData();
 
     formData.append("name", form.name);
     formData.append("email", form.email);
-
+    formData.append("nik", form.nik);
     if (form.password) {
       formData.append("password", form.password);
     }
@@ -248,8 +274,51 @@ const Profile = () => {
                     </div>
                   </div>
 
+
                   <div className="p-6 sm:p-7">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                                            {/* NIK */}
+                                            <div className="lg:col-span-2">
+                        <label className="text-[12px] font-semibold text-slate-600">
+                          Nomor Induk Karyawan
+                        </label>
+
+                        <div className="relative mt-2 group">
+                          <IdCard
+                            size={18}
+                            className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-orange-500 transition-all"
+                          />
+
+                          <input
+                           type="text"
+                            name="nik"
+                            value={form.nik}
+                            inputMode="numeric"
+                            maxLength={10}
+                            onWheel={(e) => e.target.blur()}
+                            onChange={handleChange}
+                            placeholder="Kosongkan jika tidak ingin mengganti password"
+                            className="
+                              w-full h-12
+                              rounded-2xl
+                              border border-[#ececec]
+                              bg-white
+                              pl-11 pr-4
+                              text-sm text-slate-700
+                              placeholder:text-slate-400
+                              outline-none
+                              transition-all
+                              focus:border-orange-300
+                              focus:ring-4 focus:ring-orange-100
+                              shadow-sm
+                              appearance-none
+                              [&::-webkit-outer-spin-button]:appearance-none
+                              [&::-webkit-inner-spin-button]:appearance-none
+                              [-moz-appearance:textfield]
+                            "
+                          />
+                        </div>
+                      </div>
                       {/* NAME */}
                       <div className="lg:col-span-1">
                         <label className="text-[12px] font-semibold text-slate-600">
